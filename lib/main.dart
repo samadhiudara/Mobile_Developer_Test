@@ -12,19 +12,53 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white, elevation: 3,
+            textStyle: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: 14.0,
+              horizontal: 20.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            backgroundColor: Colors.blue,
           ),
         ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.orange,
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.blue, textStyle: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         textTheme: TextTheme(
           headline6: TextStyle(
             fontSize: 24.0,
             fontWeight: FontWeight.bold,
-            color: Colors.blueAccent,
+            color: Colors.blue,
+          ),
+          bodyText1: TextStyle(
+            fontSize: 16.0,
+            color: Colors.black,
+          ),
+          subtitle1: TextStyle(
+            fontSize: 16.0,
+            color: Colors.grey[800],
+          ),
+          button: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
       ),
@@ -32,5 +66,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,80 +1,109 @@
 import 'package:flutter/material.dart';
-import 'alert_dialog.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Welcome to My App',
-          style: TextStyle(
-            fontSize: 20.0, // Adjust app bar title font size
-            fontWeight: FontWeight.bold,
-            color: Colors.white, // Change app bar title color
-          ),
-        ),
-        backgroundColor: Colors.blue, // Change app bar background color
-        elevation: 0, // Remove app bar elevation
+        title: Text('Flutter Demo'),
       ),
-      backgroundColor: Colors.grey[400],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Welcome to my Flutter App!',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87, // Change text color
-              ),
+              'Welcome to Flutter App',
+              style: Theme.of(context).textTheme.headline6,
             ),
             SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                _showAlert(context);
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green), // Change button background color
-                textStyle: MaterialStateProperty.all<TextStyle>(
-                  TextStyle(
-                    fontSize: 16.0, // Adjust button text font size
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0), // Adjust button padding
-                ),
-              ),
-              child: Text('Show Alert'),
-            ),
+            MyButton(),
           ],
         ),
       ),
     );
   }
+}
 
-  void _showAlert(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomAlertDialog(
-          title: 'Alert',
-          content: 'Button tapped!',
-          buttonText: 'OK',
+class MyButton extends StatelessWidget {
+  Future<void> _fetchUniversities(BuildContext context) async {
+    try {
+      final response = await http.get(Uri.parse(
+          'http://universities.hipolabs.com/search?country=United+States'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        // Display data in a list view
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "Universities in the United States",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              content: Container(
+                width: double.maxFinite,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text(
+                        data[index]['name'],
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      subtitle: Text(
+                        data[index]['country'],
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
         );
+      } else {
+        throw Exception('Failed to load universities');
+      }
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Failed to fetch universities: $error"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        _fetchUniversities(context);
       },
+      child: Text('Fetch Universities'),
     );
   }
 }
-
-
-
-
 

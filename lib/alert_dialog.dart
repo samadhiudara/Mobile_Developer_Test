@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// custom_alert_dialog.dart
+/*import 'package:flutter/material.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   final String title;
@@ -19,12 +20,15 @@ class CustomAlertDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(); // Dismiss the dialog
+            Navigator.push(
+              context,
+             MaterialPageRoute(builder: (context) => NextPage()), // Navigate to the desired page
+            );
           },
           child: Text(buttonText),
         ),
       ],
     );
   }
-}
-
+}*/
